@@ -26,6 +26,25 @@ npm run dev
 Open the printed local URL. Drag the hanging cord to swing the lamp; tap it to
 toggle the power.
 
+## Deploying
+
+The repo ships with a **GitHub Pages** workflow (`.github/workflows/deploy.yml`)
+that builds and publishes on every push to `main`. To enable it:
+
+1. Go to **Settings → Pages** on the GitHub repo.
+2. Under *Build and deployment*, set **Source** to **GitHub Actions**.
+3. Push to `main`. The app appears at
+   `https://<username>.github.io/LumaReact/`.
+
+`vite.config.js` uses `base: './'`, so the same build also works at a domain
+root (Vercel / Netlify / Cloudflare Pages — just connect the repo and add the
+build commands `npm ci && npm run build`).
+
+> **No WebGL?** The app detects missing WebGL support and shows a friendly
+> message instead of a blank scene. The lamp scene is also code-split via
+> `React.lazy`, so Three.js loads only after the rest of the page is
+> interactive.
+
 ## Project structure
 
 ```

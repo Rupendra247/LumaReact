@@ -38,12 +38,23 @@ export default function LampApp() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ isOn, color: color.name, brightness }))
   }, [isOn, color, brightness])
 
-  const mountRef = useLamp(stateRef, () => setIsOn((prev) => !prev))
+  const { mountRef, supported } = useLamp(stateRef, () => setIsOn((prev) => !prev))
 
   return (
     <div className="flex min-h-screen w-full items-center justify-center bg-neutral-950 p-6">
       <div className="flex w-full max-w-md flex-col items-center gap-6">
-        <div ref={mountRef} className="w-full overflow-hidden rounded-2xl" style={{ height: 420 }} />
+        {supported ? (
+          <div ref={mountRef} className="w-full overflow-hidden rounded-2xl" style={{ height: 420 }} />
+        ) : (
+          <div
+            className="flex w-full items-center justify-center rounded-2xl border border-neutral-800 bg-neutral-900 text-center text-sm text-neutral-400"
+            style={{ height: 420 }}
+          >
+            <p className="max-w-xs px-6">
+              WebGL is not supported in this browser or device. Luma needs WebGL to render the 3D lamp.
+            </p>
+          </div>
+        )}
 
         <p className="-mt-2 text-sm text-neutral-400">
           Drag the cord to swing it — tap to {isOn ? 'turn off' : 'turn on'} the lamp

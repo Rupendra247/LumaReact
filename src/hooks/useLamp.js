@@ -1,13 +1,24 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { buildLampScene } from '../scene/buildLamp'
 import { stepPendulum } from '../physics/pendulum'
 import { LIGHT, PENDULUM } from '../utils/constants'
 
+function webglAvailable() {
+  try {
+    const canvas = document.createElement('canvas')
+    return !!(window.WebGLRenderingContext && (canvas.getContext('webgl2') || canvas.getContext('webgl')))
+  } catch {
+    return false
+  }
+}
+
 export function useLamp(stateRef, onTap) {
   const mountRef = useRef(null)
+  const [supported] = useState(webglAvailable)
 
   useEffect(() => {
+    if (!supported) return
     const mount = mountRef.current
     let width = mount.clientWidth
     let height = mount.clientHeight
@@ -171,5 +182,5 @@ export function useLamp(stateRef, onTap) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return mountRef
+  return { mountRef, supported }
 }
